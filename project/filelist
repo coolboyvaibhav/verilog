@@ -1,6 +1,6 @@
 
 `timescale 1ns/1ps
-`default_nettype none
+//`default_nettype none
 /////////////////////////twos_complement
 
 module twos_complement(in,out);
@@ -253,7 +253,7 @@ module eight_point_fft_tb;
 
         reg clk, rst_n, start, write;
         reg [15:0] IN0_real, IN0_imag,IN1_real, IN1_imag, IN2_real, IN2_imag, IN3_real, IN3_imag, IN4_real, IN4_imag, IN5_real, IN5_imag, IN6_real, IN6_imag, IN7_real, IN7_imag;
-        wire signed OUT0_real, OUT0_imag,OUT1_real, OUT1_imag, OUT2_real, OUT2_imag, OUT3_real, OUT3_imag, OUT4_real, OUT4_imag, OUT5_real, OUT5_imag, OUT6_real, OUT6_imag, OUT7_real, OUT7_imag;
+        wire signed [15:0] OUT0_real, OUT0_imag,OUT1_real, OUT1_imag, OUT2_real, OUT2_imag, OUT3_real, OUT3_imag, OUT4_real, OUT4_imag, OUT5_real, OUT5_imag, OUT6_real, OUT6_imag, OUT7_real, OUT7_imag;
         wire ready;
 
         eight_point_fft u_DUT(.CLK(clk), .RST_N(rst_n),
