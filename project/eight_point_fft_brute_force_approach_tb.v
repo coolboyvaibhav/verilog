@@ -141,8 +141,24 @@ in7_imag =16'd0000 ; // Input 16-bit imaginary part of 𝑥7
    .in5_imag(in5_imag),
    .in6_real(in6_real),
    .in6_imag(in6_imag),
-   .in7_real(in7_real),.in7_imag(in7_imag),
-.out0_real(out0_real),.out0_imag(out0_imag),.out1_real(out1_real),.out1_imag(out1_imag),.out2_real(out2_real),.out2_imag(out2_imag),.out3_real(out3_real),.out3_imag(out3_imag),.out4_real(out4_real),.out4_imag(out4_imag),.out5_real(out5_real),.out5_imag(out5_imag),.out6_real(out6_real),.out6_imag(out6_imag),.out7_real(out7_real),.out7_imag(out7_imag)
+   .in7_real(in7_real),
+   .in7_imag(in7_imag),
+.out0_real(out0_real),
+.out0_imag(out0_imag),
+.out1_real(out1_real),
+.out1_imag(out1_imag),
+.out2_real(out2_real),
+.out2_imag(out2_imag),
+.out3_real(out3_real),
+.out3_imag(out3_imag),
+.out4_real(out4_real),
+.out4_imag(out4_imag),
+.out5_real(out5_real),
+.out5_imag(out5_imag),
+.out6_real(out6_real),
+.out6_imag(out6_imag),
+.out7_real(out7_real),
+.out7_imag(out7_imag)
  );
 	// assign s_golden = {1'b0, a} + {1'b0, b};
 

@@ -44,27 +44,27 @@ module inv_two(in ,out);
 endmodule
 ////dtft module
 
-module dftf_module(in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag,out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag);
+// module dftf_module(in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag,out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag);
 
-input [15:0] in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag;
-output [15:0] out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag;
+// input [15:0] in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag;
+// output [15:0] out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag;
 
-wire signed [15:0] out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag;
-wire signed [15:0] in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag;
+// wire signed [15:0] out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag;
+// wire signed [15:0] in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag;
 
-assign out0_real = in0_real + in1_real + in2_real + in3_real;
-assign out0_imag = in0_imag + in1_imag + in2_imag + in3_imag;
+// assign out0_real = in0_real + in1_real + in2_real + in3_real;
+// assign out0_imag = in0_imag + in1_imag + in2_imag + in3_imag;
 
-assign out1_real = in0_real + in1_imag - in2_real - in3_imag;
-assign out1_imag = in3_real + in0_imag - in1_real - in2_imag;
+// assign out1_real = in0_real + in1_imag - in2_real - in3_imag;
+// assign out1_imag = in3_real + in0_imag - in1_real - in2_imag;
 
-assign out2_real = in0_real - in1_real + in2_real - in3_real;
-assign out2_imag = in0_imag - in1_imag + in2_imag - in3_imag;
+// assign out2_real = in0_real - in1_real + in2_real - in3_real;
+// assign out2_imag = in0_imag - in1_imag + in2_imag - in3_imag;
 
-assign out3_real = in0_real - in1_imag - in2_real + in3_imag;
-assign out3_imag = in0_imag + in1_real - in2_imag - in3_real;
+// assign out3_real = in0_real - in1_imag - in2_real + in3_imag;
+// assign out3_imag = in0_imag + in1_real - in2_imag - in3_real;
 
-endmodule
+// endmodule
 
 
 
@@ -124,50 +124,50 @@ inv_two invTwo13(b6_i,c6_i);
 inv_two invTwo14(b7_i,c7_i);
 inv_two invTwo15(b8_i,c8_i);
 
-dftf_module d0(a1_r,a1_i,a3_r,a3_i,a5_r,a5_i,a7_r,a7_i,y1_r,y1_i,y2_r,y2_i,y3_r,y3_i,y4_r,y4_i);
-dftf_module d1(a2_r,a2_i,a4_r,a4_i,a6_r,a6_i,a8_r,a8_i,y5_r,y5_i,y6_r,y6_i,y7_r,y7_i,y8_r,y8_i);
+// dftf_module d0(a1_r,a1_i,a3_r,a3_i,a5_r,a5_i,a7_r,a7_i,y1_r,y1_i,y2_r,y2_i,y3_r,y3_i,y4_r,y4_i);
+// dftf_module d1(a2_r,a2_i,a4_r,a4_i,a6_r,a6_i,a8_r,a8_i,y5_r,y5_i,y6_r,y6_i,y7_r,y7_i,y8_r,y8_i);
 
-// //stage all real parts and imaginary added
-// assign y1_r =a1_r+a4_r+a5_r+a7_r;
-// assign y1_i =a1_i+a4_i+a5_i+a7_i;
+//stage all real parts and imaginary added
+assign y1_r =a1_r+a4_r+a5_r+a7_r;
+assign y1_i =a1_i+a4_i+a5_i+a7_i;
 
-// //real part=real of first +imaginary of 2nd -real of 3rd -imaginary of 4th
-// //imaginary part=real part of 4th +imaginary of first -real of 2nd -imaginary of 3rd
-// assign y2_r =a1_r+a4_i-a5_r+a7_i;
-// assign y2_i =a1_r+a4_r+a5_r+a7_r;
+//real part=real of first +imaginary of 2nd -real of 3rd -imaginary of 4th
+//imaginary part=real part of 4th +imaginary of first -real of 2nd -imaginary of 3rd
+assign y2_r =a1_r+a4_i-a5_r+a7_i;
+assign y2_i =a1_r+a4_r+a5_r+a7_r;
 
-// //real part=real of first -real of 2nd +real of 3rd -real of 4th
-// //imaginary part=imaginary of first -imaginary of 2nd +imaginary of 3rd -imaginary of 4th
-// assign y3_r =a1_r+a4_r+a5_r+a7_r;
-// assign y3_i =a1_r+a4_r+a5_r+a7_r;
-
-
-// //real part=real of first -imaginary of 2nd -real of 3rd +imaginary of 4th
-// //imaginary part=imaginary of first +real of 2nd - imaginary of 3rd -real of 4th
-// assign y4_r =a1_r+a4_r+a5_r+a7_r;
-// assign y4_i =a1_r+a4_r+a5_r+a7_r;
+//real part=real of first -real of 2nd +real of 3rd -real of 4th
+//imaginary part=imaginary of first -imaginary of 2nd +imaginary of 3rd -imaginary of 4th
+assign y3_r =a1_r+a4_r+a5_r+a7_r;
+assign y3_i =a1_r+a4_r+a5_r+a7_r;
 
 
-// ///////////
-// //stage all real parts and imaginary added
-// assign y5_r =a2_r+a4_r+a6_r+a8_r;
-// assign y5_i =a2_i+a4_i+a6_i+a8_i;
-
-// //real part=real of first +imaginary of 2nd -real of 3rd -imaginary of 4th
-// //imaginary part=real part of 4th +imaginary of first -real of 2nd -imaginary of 3rd
-// assign y6_r =a2_r+a4_i-a6_r+a8_i;
-// assign y6_i =a2_r+a4_r+a6_r+a8_r;
-
-// //real part=real of first -real of 2nd +real of 3rd -real of 4th
-// //imaginary part=imaginary of first -imaginary of 2nd +imaginary of 3rd -imaginary of 4th
-// assign y7_r =a2_r+a4_r+a6_r+a8_r;
-// assign y7_i =a2_r+a4_r+a6_r+a8_r;
+//real part=real of first -imaginary of 2nd -real of 3rd +imaginary of 4th
+//imaginary part=imaginary of first +real of 2nd - imaginary of 3rd -real of 4th
+assign y4_r =a1_r+a4_r+a5_r+a7_r;
+assign y4_i =a1_r+a4_r+a5_r+a7_r;
 
 
-// //real part=real of first -imaginary of 2nd -real of 3rd +imaginary of 4th
-// //imaginary part=imaginary of first +real of 2nd - imaginary of 3rd -real of 4th
-// assign y8_r =a2_r+a4_r+a6_r+a8_r;
-// assign y8_i =a2_r+a4_r+a6_r+a8_r;
+///////////
+//stage all real parts and imaginary added
+assign y5_r =a2_r+a4_r+a6_r+a8_r;
+assign y5_i =a2_i+a4_i+a6_i+a8_i;
+
+//real part=real of first +imaginary of 2nd -real of 3rd -imaginary of 4th
+//imaginary part=real part of 4th +imaginary of first -real of 2nd -imaginary of 3rd
+assign y6_r =a2_r+a4_i-a6_r+a8_i;
+assign y6_i =a2_r+a4_r+a6_r+a8_r;
+
+//real part=real of first -real of 2nd +real of 3rd -real of 4th
+//imaginary part=imaginary of first -imaginary of 2nd +imaginary of 3rd -imaginary of 4th
+assign y7_r =a2_r+a4_r+a6_r+a8_r;
+assign y7_i =a2_r+a4_r+a6_r+a8_r;
+
+
+//real part=real of first -imaginary of 2nd -real of 3rd +imaginary of 4th
+//imaginary part=imaginary of first +real of 2nd - imaginary of 3rd -real of 4th
+assign y8_r =a2_r+a4_r+a6_r+a8_r;
+assign y8_i =a2_r+a4_r+a6_r+a8_r;
 // ////
 
 always @(posedge CLK) begin
@@ -300,20 +300,6 @@ module eight_point_fft_tb;
         initial begin
                 $dumpfile("eight_point_fft_tb.vcd");
                 $dumpvars(0, u_DUT);
-//              $display("%b",clk);
-//              $display("%b",rst_n);
-//              $display("%b",ready);
-//              $display("%d,%d",IN1_real,IN1_imag);
-//              $display("%d,%d",OUT2_real,OUT2_imag);
-//              $display("%d,%d",OUT3_real,OUT3_imag);
-//              $display("%d,%d",OUT4_real,OUT4_imag);
-//              $display("%d,%d",OUT5_real,OUT5_imag);
-//              $display("%d,%d",OUT6_real,OUT6_imag);
-//              $display("%d,%d",OUT7_real,OUT7_imag);
-//              $display("%d,%d",OUT8_real,OUT8_imag);
-                // $monitor("Time: %t \n out1_r = %b , out1_i = %b \n out2_r = %b , out2_i = %b \n out3_r = %b , out3_i = %b \n out4_r = %b , out4_i = %b \n out5_r = %b , out5_i = %b \n out6_r = %b , out6_i = %b \n out7_r = %b , out7_i = %b \n out8_r = %b , out8_i = %b \n ready = %b ", $time, OUT1_real, OUT1_imag, OUT2_real, OUT2_imag, OUT3_real, OUT3_imag, OUT4_real, OUT4_imag, OUT5_real, OUT5_imag, OUT6_real, OUT6_imag, OUT7_real, OUT7_imag, OUT8_real, OUT8_imag, ready);
-
-                // $monitor("Time: %t \n out0_real = %b , out0_imag = %b \n out1_real = %b , out1_imag = %b \n out2_real = %b , out2_imag = %b \n out3_real = %b , out3_imag = %b \n out4_real = %b , out4_imag = %b \n out5_real = %b , out5_imag = %b \n out6_real = %b , out6_imag = %b \n out7_real = %b , out7_i = %b \n ready = %b ", $time, out0_real, out0_imag, out1_real, out1_imag, out2_real, out2_imag, out3_real, out3_imag, out4_real, out4_imag, out5_real, out5_imag, out6_real, out6_imag, out7_real, out7_imag, ready);
                 $monitor("Time: %t \n out0_real = %b , out0_imag = %b \n out1_real = %b , out1_imag = %b \n out2_real = %b , out2_imag = %b \n out3_real = %b , out3_imag = %b \n out4_real = %b , out4_imag = %b \n out5_real = %b , out5_imag = %b \n out6_real = %b , out6_imag = %b \n out7_real = %b , out7_i = %b \n ready = %b ", $time,OUT0_real,OUT0_imag, OUT1_real, OUT1_imag, OUT2_real, OUT2_imag, OUT3_real, OUT3_imag, OUT4_real, OUT4_imag, OUT5_real, OUT5_imag, OUT6_real, OUT6_imag, OUT7_real, OUT7_imag, ready);
         end
 
