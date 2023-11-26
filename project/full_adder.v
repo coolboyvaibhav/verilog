@@ -1,4 +1,3 @@
-
 module full_adder(s,cout, a,b,cin);
         output s,cout;
         input a,b,cin;

@@ -1,7 +1,59 @@
-`include "dftf.v"
-`include "twos_complement.v"
-`include "inv_twos_complement.v"
+// `include "dftf.v"
+// `include "twos_complement.v"
+// `include "inv_twos_complement.v"
 
+/////////////////////////twos_complement
+
+module twos_complement(
+  input [15:0] in,
+  output [15:0] out
+);
+
+  reg signed [14:0] x;
+
+  always @* begin
+    if (in[15] == 1'b1) begin
+      x = ~(in) + 1'b1;
+      out <= {1'b1, x};
+    end
+    else begin
+      out <= in;
+    end
+  end
+
+endmodule
+
+
+////////////inverse twos complement
+
+module inv_two(
+  input [15:0] in,
+  output [15:0] out
+);
+
+  reg [14:0] x;
+  reg [15:0] out;
+
+  always @* begin
+    if (in[15] == 1) begin
+      x = in - 1;
+      out <= {1'b1, ~x};
+    end
+    else begin
+      out <= in;
+    end
+  end
+
+endmodule
+
+
+
+
+
+
+
+
+//////////////////////////main code
 module eight_point_fft(CLK,F RST_N, in1_real, in1_imag, in2_real, in2_imag, in3_real, in3_imag, in4_real, in4_imag, in5_real, in5_imag, in6_real, in6_imag, in7_real, in7_imag, in8_real, in8_imag, out1_real, out1_imag, out2_real, out2_imag, out3_real, out3_imag, out4_real, out4_imag, out5_real, out5_imag, out6_real, out6_imag, out7_real, out7_imag, out8_real, out8_imag,  write, start, ready);
 
 input CLK, RST_N, write, start;
