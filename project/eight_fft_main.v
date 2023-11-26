@@ -3,7 +3,7 @@
 
 /////////////////////////twos_complement
 
-module twos_complement(in,out)
+module twos_complement(in,out);
   input [15:0] in;
   output [15:0] out;
   reg signed [15:0] out;
@@ -24,7 +24,7 @@ endmodule
 
 ////////////inverse twos complement
 
-module inv_two(in ,out)
+module inv_two(in ,out);
     input [15:0] in;
   output [15:0] out;
   wire signed [15:0] in;
@@ -219,22 +219,22 @@ else begin
 		b8_r <= y4_r + ((y8_r>>>1)+(y8_r>>>2)-(y8_r>>>4)+(y8_r>>>5)-(y8_r>>>6)+(y8_r>>>7)-(y8_r>>>8)) - ((y8_i>>>1)+(y8_i>>>2)-(y8_i>>>4)+(y8_i>>>5)-(y8_i>>>6)+(y8_i>>>7)-(y8_i>>>8));
 		b8_i <= y4_i + ((y8_i>>>1)+(y8_i>>>2)-(y8_i>>>4)+(y8_i>>>5)-(y8_i>>>6)+(y8_i>>>7)-(y8_i>>>8)) + ((y8_r>>>1)+(y8_r>>>2)-(y8_r>>>4)+(y8_r>>>5)-(y8_r>>>6)+(y8_r>>>7)-(y8_r>>>8));
 
-		out1_real = c1_r;
-		out1_imag = c1_i;
-		out2_real = c2_r;
-		out2_imag = c2_i;
-		out3_real = c3_r;
-		out3_imag = c3_i;
-		out4_real = c4_r;
-		out4_imag = c4_i;
-		out5_real = c5_r;
-		out5_imag = c5_i;
-		out6_real = c6_r;
-		out6_imag = c6_i;
-		out7_real = c7_r;
-		out7_imag = c7_i;
-		out8_real = c8_r;
-		out8_imag = c8_i;
+		out0_real = c1_r;
+		out0_imag = c1_i;
+		out1_real = c2_r;
+		out1_imag = c2_i;
+		out2_real = c3_r;
+		out2_imag = c3_i;
+		out3_real = c4_r;
+		out3_imag = c4_i;
+		out4_real = c5_r;
+		out4_imag = c5_i;
+		out5_real = c6_r;
+		out5_imag = c6_i;
+		out6_real = c7_r;
+		out6_imag = c7_i;
+		out7_real = c8_r;
+		out7_imag = c8_i;
 		
 		ready = 1'b1;
 	end
