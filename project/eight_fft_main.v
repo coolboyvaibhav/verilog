@@ -3,17 +3,16 @@
 
 /////////////////////////twos_complement
 
-module twos_complement(
-  input [15:0] in,
-  output [15:0] out
-);
-
-  reg signed [14:0] x;
+module twos_complement(in,out)
+  input [15:0] in;
+  output [15:0] out;
+  reg signed [15:0] out;
+  reg signed [14:0] y;
 
   always @* begin
-    if (in[15] == 1'b1) begin
-      x = ~(in) + 1'b1;
-      out <= {1'b1, x};
+    if(in[15]==1'b1) begin
+      y = ~(in)+1'b1;
+      out = {1'b1,y};
     end
     else begin
       out <= in;
@@ -25,22 +24,21 @@ endmodule
 
 ////////////inverse twos complement
 
-module inv_two(
-  input [15:0] in,
-  output [15:0] out
-);
-
-  reg [14:0] x;
+module inv_two(in ,out)
+    input [15:0] in;
+  output [15:0] out;
+  wire signed [15:0] in;
+  reg [14:0] y;
   reg [15:0] out;
-
+  
   always @* begin
-    if (in[15] == 1) begin
-      x = in - 1;
-      out <= {1'b1, ~x};
-    end
-    else begin
-      out <= in;
-    end
+  if (in[15]==1) begin
+    y = in-1;
+    out = {1'b1,~y};
+  end
+  else begin
+    out = in;
+  end
   end
 
 endmodule
@@ -93,21 +91,21 @@ reg signed [15:0] a1_r, a2_r, a3_r, a4_r, a5_r, a6_r, a7_r, a8_r, a1_i, a2_i, a3
 reg signed [15:0] b1_r, b2_r, b3_r, b4_r, b5_r, b6_r, b7_r, b8_r, b1_i, b2_i, b3_i, b4_i, b5_i, b6_i, b7_i, b8_i;
 
 twos_complement two0(in0_real,t1_r);
-twos_complement two1(in2_real,t2_r);
-twos_complement two2(in3_real,t3_r);
-twos_complement two3(in4_real,t4_r);
-twos_complement two4(in5_real,t5_r);
-twos_complement two5(in6_real,t6_r);
-twos_complement two6(in7_real,t7_r);
-twos_complement two7(in8_real,t8_r);
+twos_complement two1(in1_real,t2_r);
+twos_complement two2(in2_real,t3_r);
+twos_complement two3(in3_real,t4_r);
+twos_complement two4(in4_real,t5_r);
+twos_complement two5(in5_real,t6_r);
+twos_complement two6(in6_real,t7_r);
+twos_complement two7(in7_real,t8_r);
 twos_complement two8(in0_imag,t1_i);
-twos_complement two9(in2_imag,t2_i);
-twos_complement two10(in3_imag,t3_i);
-twos_complement two11(in4_imag,t4_i);
-twos_complement two12(in5_imag,t5_i);
-twos_complement two13(in6_imag,t6_i);
-twos_complement two14(in7_imag,t7_i);
-twos_complement two15(in8_imag,t8_i);
+twos_complement two9(in1_imag,t2_i);
+twos_complement two10(in2_imag,t3_i);
+twos_complement two11(in3_imag,t4_i);
+twos_complement two12(in4_imag,t5_i);
+twos_complement two13(in5_imag,t6_i);
+twos_complement two14(in6_imag,t7_i);
+twos_complement two15(in7_imag,t8_i);
 
 inv_two invTwo0(b1_r,c1_r);
 inv_two invTwo1(b2_r,c2_r);
