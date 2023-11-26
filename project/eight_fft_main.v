@@ -45,27 +45,27 @@ module inv_two(
 endmodule
 ////dtft module
 
-module dftf_module(in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag,out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag);
+// module dftf_module(in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag,out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag);
 
-input [15:0] in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag;
-output [15:0] out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag;
+// input [15:0] in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag;
+// output [15:0] out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag;
 
-wire signed [15:0] out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag;
-wire signed [15:0] in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag;
+// wire signed [15:0] out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag;
+// wire signed [15:0] in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag;
 
-assign out0_real = in0_real + in1_real + in2_real + in3_real;
-assign out0_imag = in0_imag + in1_imag + in2_imag + in3_imag;
+// assign out0_real = in0_real + in1_real + in2_real + in3_real;
+// assign out0_imag = in0_imag + in1_imag + in2_imag + in3_imag;
 
-assign out1_real = in0_real + in1_imag - in2_real - in3_imag;
-assign out1_imag = in3_real + in0_imag - in1_real - in2_imag;
+// assign out1_real = in0_real + in1_imag - in2_real - in3_imag;
+// assign out1_imag = in3_real + in0_imag - in1_real - in2_imag;
 
-assign out2_real = in0_real - in1_real + in2_real - in3_real;
-assign out2_imag = in0_imag - in1_imag + in2_imag - in3_imag;
+// assign out2_real = in0_real - in1_real + in2_real - in3_real;
+// assign out2_imag = in0_imag - in1_imag + in2_imag - in3_imag;
 
-assign out3_real = in0_real - in1_imag - in2_real + in3_imag;
-assign out3_imag = in0_imag + in1_real - in2_imag - in3_real;
+// assign out3_real = in0_real - in1_imag - in2_real + in3_imag;
+// assign out3_imag = in0_imag + in1_real - in2_imag - in3_real;
 
-endmodule
+// endmodule
 
 
 
@@ -125,8 +125,50 @@ inv_two invTwo13(b6_i,c6_i);
 inv_two invTwo14(b7_i,c7_i);
 inv_two invTwo15(b8_i,c8_i);
 
-dftf_module d0(a1_r,a1_i,a3_r,a3_i,a5_r,a5_i,a7_r,a7_i,y1_r,y1_i,y2_r,y2_i,y3_r,y3_i,y4_r,y4_i);
-dftf_module d1(a2_r,a2_i,a4_r,a4_i,a6_r,a6_i,a8_r,a8_i,y5_r,y5_i,y6_r,y6_i,y7_r,y7_i,y8_r,y8_i);
+// dftf_module d0(a1_r,a1_i,a3_r,a3_i,a5_r,a5_i,a7_r,a7_i,y1_r,y1_i,y2_r,y2_i,y3_r,y3_i,y4_r,y4_i);
+// dftf_module d1(a2_r,a2_i,a4_r,a4_i,a6_r,a6_i,a8_r,a8_i,y5_r,y5_i,y6_r,y6_i,y7_r,y7_i,y8_r,y8_i);
+//stage all real parts and imaginary added
+y1_r =a1_r+a4_r+a5_r+a7_r;
+y1_i =a1_i+a4_i+a5_i+a7_i;
+
+//real part=real of first +imaginary of 2nd -real of 3rd -imaginary of 4th
+//imaginary part=real part of 4th +imaginary of first -real of 2nd -imaginary of 3rd 
+y2_r =a1_r+a4_i-a5_r+a7_i;
+y2_i =a1_r+a4_r+a5_r+a7_r;
+
+//real part=real of first -real of 2nd +real of 3rd -real of 4th
+//imaginary part=imaginary of first -imaginary of 2nd +imaginary of 3rd -imaginary of 4th 
+y3_r =a1_r+a4_r+a5_r+a7_r;
+y3_i =a1_r+a4_r+a5_r+a7_r;
+
+
+//real part=real of first -imaginary of 2nd -real of 3rd +imaginary of 4th
+//imaginary part=imaginary of first +real of 2nd - imaginary of 3rd -real of 4th
+y4_r =a1_r+a4_r+a5_r+a7_r;
+y4_i =a1_r+a4_r+a5_r+a7_r;
+
+
+///////////
+//stage all real parts and imaginary added
+y5_r =a2_r+a4_r+a6_r+a8_r;
+y5_i =a2_i+a4_i+a6_i+a8_i;
+
+//real part=real of first +imaginary of 2nd -real of 3rd -imaginary of 4th
+//imaginary part=real part of 4th +imaginary of first -real of 2nd -imaginary of 3rd 
+y6_r =a2_r+a4_i-a6_r+a8_i;
+y6_i =a2_r+a4_r+a6_r+a8_r;
+
+//real part=real of first -real of 2nd +real of 3rd -real of 4th
+//imaginary part=imaginary of first -imaginary of 2nd +imaginary of 3rd -imaginary of 4th 
+y7_r =a2_r+a4_r+a6_r+a8_r;
+y7_i =a2_r+a4_r+a6_r+a8_r;
+
+
+//real part=real of first -imaginary of 2nd -real of 3rd +imaginary of 4th
+//imaginary part=imaginary of first +real of 2nd - imaginary of 3rd -real of 4th
+y8_r =a2_r+a4_r+a6_r+a8_r;
+y8_i =a2_r+a4_r+a6_r+a8_r;
+////
 
 always @(posedge CLK) begin
 if (~RST_N) begin
