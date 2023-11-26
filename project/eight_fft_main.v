@@ -75,7 +75,7 @@ endmodule
 
 
 //////////////////////////main code
-module eight_point_fft(CLK,F RST_N, in0_real, in0_imag, in1_real, in1_imag, in2_real, in2_imag, in3_real, in3_imag, in4_real, in4_imag, in5_real, in5_imag, in6_real, in6_imag, in7_real, in7_imag, out1_real, out1_imag, out2_real, out2_imag, out3_real, out3_imag, out4_real, out4_imag, out5_real, out5_imag, out6_real, out6_imag, out7_real, out7_imag, out8_real, out8_imag,  write, start, ready);
+module eight_point_fft(CLK, RST_N, in0_real, in0_imag, in1_real, in1_imag, in2_real, in2_imag, in3_real, in3_imag, in4_real, in4_imag, in5_real, in5_imag, in6_real, in6_imag, in7_real, in7_imag, out0_real, out0_imag, out1_real, out1_imag, out2_real, out2_imag, out3_real, out3_imag, out4_real, out4_imag, out5_real, out5_imag, out6_real, out6_imag, out7_real, out7_imag  ,write, start, ready);
 
 input CLK, RST_N, write, start;
 input [15:0] in0_real, in0_imag, in1_real, in1_imag, in2_real, in2_imag, in3_real, in3_imag, in4_real, in4_imag, in5_real, in5_imag, in6_real, in6_imag, in7_real, in7_imag;
@@ -92,22 +92,22 @@ wire [15:0] c1_r, c2_r, c3_r, c4_r, c5_r, c6_r, c7_r, c8_r, c1_i, c2_i, c3_i, c4
 reg signed [15:0] a1_r, a2_r, a3_r, a4_r, a5_r, a6_r, a7_r, a8_r, a1_i, a2_i, a3_i, a4_i, a5_i, a6_i, a7_i, a8_i;
 reg signed [15:0] b1_r, b2_r, b3_r, b4_r, b5_r, b6_r, b7_r, b8_r, b1_i, b2_i, b3_i, b4_i, b5_i, b6_i, b7_i, b8_i;
 
-two_complement two0(in0_real,t1_r);
-two_complement two1(in2_real,t2_r);
-two_complement two2(in3_real,t3_r);
-two_complement two3(in4_real,t4_r);
-two_complement two4(in5_real,t5_r);
-two_complement two5(in6_real,t6_r);
-two_complement two6(in7_real,t7_r);
-two_complement two7(in8_real,t8_r);
-two_complement two8(in0_imag,t1_i);
-two_complement two9(in2_imag,t2_i);
-two_complement two10(in3_imag,t3_i);
-two_complement two11(in4_imag,t4_i);
-two_complement two12(in5_imag,t5_i);
-two_complement two13(in6_imag,t6_i);
-two_complement two14(in7_imag,t7_i);
-two_complement two15(in8_imag,t8_i);
+twos_complement two0(in0_real,t1_r);
+twos_complement two1(in2_real,t2_r);
+twos_complement two2(in3_real,t3_r);
+twos_complement two3(in4_real,t4_r);
+twos_complement two4(in5_real,t5_r);
+twos_complement two5(in6_real,t6_r);
+twos_complement two6(in7_real,t7_r);
+twos_complement two7(in8_real,t8_r);
+twos_complement two8(in0_imag,t1_i);
+twos_complement two9(in2_imag,t2_i);
+twos_complement two10(in3_imag,t3_i);
+twos_complement two11(in4_imag,t4_i);
+twos_complement two12(in5_imag,t5_i);
+twos_complement two13(in6_imag,t6_i);
+twos_complement two14(in7_imag,t7_i);
+twos_complement two15(in8_imag,t8_i);
 
 inv_two invTwo0(b1_r,c1_r);
 inv_two invTwo1(b2_r,c2_r);
@@ -129,46 +129,46 @@ inv_two invTwo15(b8_i,c8_i);
 // dftf_module d0(a1_r,a1_i,a3_r,a3_i,a5_r,a5_i,a7_r,a7_i,y1_r,y1_i,y2_r,y2_i,y3_r,y3_i,y4_r,y4_i);
 // dftf_module d1(a2_r,a2_i,a4_r,a4_i,a6_r,a6_i,a8_r,a8_i,y5_r,y5_i,y6_r,y6_i,y7_r,y7_i,y8_r,y8_i);
 //stage all real parts and imaginary added
-y1_r =a1_r+a4_r+a5_r+a7_r;
-y1_i =a1_i+a4_i+a5_i+a7_i;
+assign y1_r =a1_r+a4_r+a5_r+a7_r;
+assign y1_i =a1_i+a4_i+a5_i+a7_i;
 
 //real part=real of first +imaginary of 2nd -real of 3rd -imaginary of 4th
 //imaginary part=real part of 4th +imaginary of first -real of 2nd -imaginary of 3rd 
-y2_r =a1_r+a4_i-a5_r+a7_i;
-y2_i =a1_r+a4_r+a5_r+a7_r;
+assign y2_r =a1_r+a4_i-a5_r+a7_i;
+assign y2_i =a1_r+a4_r+a5_r+a7_r;
 
 //real part=real of first -real of 2nd +real of 3rd -real of 4th
 //imaginary part=imaginary of first -imaginary of 2nd +imaginary of 3rd -imaginary of 4th 
-y3_r =a1_r+a4_r+a5_r+a7_r;
-y3_i =a1_r+a4_r+a5_r+a7_r;
+assign y3_r =a1_r+a4_r+a5_r+a7_r;
+assign y3_i =a1_r+a4_r+a5_r+a7_r;
 
 
 //real part=real of first -imaginary of 2nd -real of 3rd +imaginary of 4th
 //imaginary part=imaginary of first +real of 2nd - imaginary of 3rd -real of 4th
-y4_r =a1_r+a4_r+a5_r+a7_r;
-y4_i =a1_r+a4_r+a5_r+a7_r;
+assign y4_r =a1_r+a4_r+a5_r+a7_r;
+assign y4_i =a1_r+a4_r+a5_r+a7_r;
 
 
 ///////////
 //stage all real parts and imaginary added
-y5_r =a2_r+a4_r+a6_r+a8_r;
-y5_i =a2_i+a4_i+a6_i+a8_i;
+assign y5_r =a2_r+a4_r+a6_r+a8_r;
+assign y5_i =a2_i+a4_i+a6_i+a8_i;
 
 //real part=real of first +imaginary of 2nd -real of 3rd -imaginary of 4th
 //imaginary part=real part of 4th +imaginary of first -real of 2nd -imaginary of 3rd 
-y6_r =a2_r+a4_i-a6_r+a8_i;
-y6_i =a2_r+a4_r+a6_r+a8_r;
+assign y6_r =a2_r+a4_i-a6_r+a8_i;
+assign y6_i =a2_r+a4_r+a6_r+a8_r;
 
 //real part=real of first -real of 2nd +real of 3rd -real of 4th
 //imaginary part=imaginary of first -imaginary of 2nd +imaginary of 3rd -imaginary of 4th 
-y7_r =a2_r+a4_r+a6_r+a8_r;
-y7_i =a2_r+a4_r+a6_r+a8_r;
+assign y7_r =a2_r+a4_r+a6_r+a8_r;
+assign y7_i =a2_r+a4_r+a6_r+a8_r;
 
 
 //real part=real of first -imaginary of 2nd -real of 3rd +imaginary of 4th
 //imaginary part=imaginary of first +real of 2nd - imaginary of 3rd -real of 4th
-y8_r =a2_r+a4_r+a6_r+a8_r;
-y8_i =a2_r+a4_r+a6_r+a8_r;
+assign y8_r =a2_r+a4_r+a6_r+a8_r;
+assign y8_i =a2_r+a4_r+a6_r+a8_r;
 ////
 
 always @(posedge CLK) begin
@@ -246,3 +246,4 @@ endmodule
 	
 		
 		
+
