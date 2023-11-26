@@ -1,0 +1,28 @@
+
+# read design
+read_verilog eight_point_fft.v   #add the file name here
+hierarchy -check
+#hierarchy -top eight_point_fft  #module name
+#hierarchy -top mpadd256_serial
+hierarchy -top eight_point_fft
+#flatten
+# high level synthesis
+proc; opt; clean
+fsm; opt; clean
+memory; opt; clean
+# low level synthesis
+techmap; opt; clean
+# map to target architecture
+dfflibmap -liberty stdcells.lib
+abc -liberty stdcells.lib
+# split larger signals
+splitnets -ports; opt; clean
+# write synthesis output
+write_verilog synth.v
+write_spice synth.sp
+# print synthesis reports
+stat
+stat -liberty stdcells.lib
+
+show -format svg -prefix /home/vaibnam//project_fft/pic1 eight_point_fft
+#show -format svg -prefix /home/vaibnam//project_fft/pic2 mpadd256_serial #add path and name for svg picture and module_name
