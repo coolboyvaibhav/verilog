@@ -24,24 +24,24 @@ endmodule
 
 
 /***********************************inverse twos complement******************************************************/
-module inv_two(in ,out);
-    input [15:0] in;
-  output [15:0] out;
-  wire signed [15:0] in;
-  reg [14:0] y;
-  reg [15:0] out;
+// module inv_two(in ,out);
+//     input [15:0] in;
+//   output [15:0] out;
+//   wire signed [15:0] in;
+//   reg [14:0] y;
+//   reg [15:0] out;
 
-  always @* begin
-  if (in[15]==1) begin
-    y = in-1;
-    out = {1'b1,~y};
-  end
-  else begin
-    out = in;
-  end
-  end
+//   always @* begin
+//   if (in[15]==1) begin
+//     y = in-1;
+//     out = {1'b1,~y};
+//   end
+//   else begin
+//     out = in;
+//   end
+//   end
 
-endmodule
+// endmodule
 
 /***********************************main code******************************************************/
 module eight_point_fft(CLK, RST_N, in0_real, in0_imag, in1_real, in1_imag, in2_real, in2_imag, in3_real, in3_imag, in4_real, in4_imag, in5_real, in5_imag, in6_real, in6_imag, in7_real, in7_imag, out0_real, out0_imag, out1_real, out1_imag, out2_real, out2_imag, out3_real, out3_imag, out4_real, out4_imag, out5_real, out5_imag, out6_real, out6_imag, out7_real, out7_imag  ,write, start, ready);
@@ -78,22 +78,40 @@ twos_complement two13(in5_imag,t6_i);
 twos_complement two14(in6_imag,t7_i);
 twos_complement two15(in7_imag,t8_i);
 
-inv_two invTwo0(b1_r,c1_r);
-inv_two invTwo1(b2_r,c2_r);
-inv_two invTwo2(b3_r,c3_r);
-inv_two invTwo3(b4_r,c4_r);
-inv_two invTwo4(b5_r,c5_r);
-inv_two invTwo5(b6_r,c6_r);
-inv_two invTwo6(b7_r,c7_r);
-inv_two invTwo7(b8_r,c8_r);
-inv_two invTwo8(b1_i,c1_i);
-inv_two invTwo9(b2_i,c2_i);
-inv_two invTwo10(b3_i,c3_i);
-inv_two invTwo11(b4_i,c4_i);
-inv_two invTwo12(b5_i,c5_i);
-inv_two invTwo13(b6_i,c6_i);
-inv_two invTwo14(b7_i,c7_i);
-inv_two invTwo15(b8_i,c8_i);
+// inv_two invTwo0(b1_r,c1_r);
+// inv_two invTwo1(b2_r,c2_r);
+// inv_two invTwo2(b3_r,c3_r);
+// inv_two invTwo3(b4_r,c4_r);
+// inv_two invTwo4(b5_r,c5_r);
+// inv_two invTwo5(b6_r,c6_r);
+// inv_two invTwo6(b7_r,c7_r);
+// inv_two invTwo7(b8_r,c8_r);
+// inv_two invTwo8(b1_i,c1_i);
+// inv_two invTwo9(b2_i,c2_i);
+// inv_two invTwo10(b3_i,c3_i);
+// inv_two invTwo11(b4_i,c4_i);
+// inv_two invTwo12(b5_i,c5_i);
+// inv_two invTwo13(b6_i,c6_i);
+// inv_two invTwo14(b7_i,c7_i);
+// inv_two invTwo15(b8_i,c8_i);
+
+
+twos_complement invTwo0(b1_r,c1_r);
+twos_complement invTwo1(b2_r,c2_r);
+twos_complement invTwo2(b3_r,c3_r);
+twos_complement invTwo3(b4_r,c4_r);
+twos_complement invTwo4(b5_r,c5_r);
+twos_complement invTwo5(b6_r,c6_r);
+twos_complement invTwo6(b7_r,c7_r);
+twos_complement invTwo7(b8_r,c8_r);
+twos_complement invTwo8(b1_i,c1_i);
+twos_complement invTwo9(b2_i,c2_i);
+twos_complement invTwo10(b3_i,c3_i);
+twos_complement invTwo11(b4_i,c4_i);
+twos_complement invTwo12(b5_i,c5_i);
+twos_complement invTwo13(b6_i,c6_i);
+twos_complement invTwo14(b7_i,c7_i);
+twos_complement invTwo15(b8_i,c8_i);
 
 // X(0) = x(1) +  x(2) + x(3) +  x(4)
 // X(0) = x(1) - jx(2) + x(3) + jx(4)
