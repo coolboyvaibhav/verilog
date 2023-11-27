@@ -95,47 +95,52 @@ inv_two invTwo13(b6_i,c6_i);
 inv_two invTwo14(b7_i,c7_i);
 inv_two invTwo15(b8_i,c8_i);
 
+// X(0) = x(1) +  x(2) + x(3) +  x(4)
+// X(0) = x(1) - jx(2) + x(3) + jx(4)
+// X(0) = x(1) - x(2) + x(3)  -  x(4)
+// X(0) = x(1) - jx(2) + x(3) + jx(4)
+
 //stage all real parts and imaginary added
-assign y1_r =a1_r+a4_r+a5_r+a7_r;
-assign y1_i =a1_i+a4_i+a5_i+a7_i;
+assign y1_r = a1_r + a3_r + a5_r + a7_r;
+assign y1_i = a1_i + a3_i + a5_i + a7_i;
 
 //real part=real of first +imaginary of 2nd -real of 3rd -imaginary of 4th
 //imaginary part=real part of 4th +imaginary of first -real of 2nd -imaginary of 3rd
-assign y2_r =a1_r+a4_i-a5_r+a7_i;
-assign y2_i =a1_r+a4_r+a5_r+a7_r;
+assign y2_r = a1_r + a3_i - a5_r - a7_i;
+assign y2_i = a1_i - a3_r - a5_i + a7_r;
 
 //real part=real of first -real of 2nd +real of 3rd -real of 4th
 //imaginary part=imaginary of first -imaginary of 2nd +imaginary of 3rd -imaginary of 4th
-assign y3_r =a1_r+a4_r+a5_r+a7_r;
-assign y3_i =a1_r+a4_r+a5_r+a7_r;
+assign y3_r = a1_r - a3_r + a5_r - a7_r;
+assign y3_i = a1_i - a3_i + a5_i - a7_i;
 
 
 //real part=real of first -imaginary of 2nd -real of 3rd +imaginary of 4th
 //imaginary part=imaginary of first +real of 2nd - imaginary of 3rd -real of 4th
-assign y4_r =a1_r+a4_r+a5_r+a7_r;
-assign y4_i =a1_r+a4_r+a5_r+a7_r;
+assign y4_r = a1_r - a3_i - a5_r + a7_i;
+assign y4_i = a1_i + a3_r - a5_i - a7_r;
 
 
 ///////////
 //stage all real parts and imaginary added
-assign y5_r =a2_r+a4_r+a6_r+a8_r;
-assign y5_i =a2_i+a4_i+a6_i+a8_i;
+assign y5_r = a2_r + a4_r + a6_r + a8_r;
+assign y5_i = a2_i + a4_i + a6_i + a8_i;
 
 //real part=real of first +imaginary of 2nd -real of 3rd -imaginary of 4th
 //imaginary part=real part of 4th +imaginary of first -real of 2nd -imaginary of 3rd
-assign y6_r =a2_r+a4_i-a6_r+a8_i;
-assign y6_i =a2_r+a4_r+a6_r+a8_r;
+assign y6_r = a2_r + a4_i - a6_r - a8_i;
+assign y6_i = a2_i - a4_r - a6_i + a8_r;
 
 //real part=real of first -real of 2nd +real of 3rd -real of 4th
 //imaginary part=imaginary of first -imaginary of 2nd +imaginary of 3rd -imaginary of 4th
-assign y7_r =a2_r+a4_r+a6_r+a8_r;
-assign y7_i =a2_r+a4_r+a6_r+a8_r;
+assign y7_r = a2_r - a4_r + a6_r - a8_r;
+assign y7_i = a2_i - a4_i + a6_i - a8_i;
 
 
 //real part=real of first -imaginary of 2nd -real of 3rd +imaginary of 4th
 //imaginary part=imaginary of first +real of 2nd - imaginary of 3rd -real of 4th
-assign y8_r =a2_r+a4_r+a6_r+a8_r;
-assign y8_i =a2_r+a4_r+a6_r+a8_r;
+assign y8_r = a2_r - a4_i - a6_r + a8_i;
+assign y8_i = a2_i + a4_r - a6_i - a8_r;
 // ////
 
 always @(posedge CLK) begin
