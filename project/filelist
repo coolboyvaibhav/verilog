@@ -1,8 +1,8 @@
 
 `timescale 1ns/1ps
-//`default_nettype none
-/////////////////////////twos_complement
 
+
+/*********************************** twos complement******************************************************/
 module twos_complement(in,out);
   input [15:0] in;
   output [15:0] out;
@@ -22,8 +22,8 @@ module twos_complement(in,out);
 endmodule
 
 
-////////////inverse twos complement
 
+/***********************************inverse twos complement******************************************************/
 module inv_two(in ,out);
     input [15:0] in;
   output [15:0] out;
@@ -43,7 +43,7 @@ module inv_two(in ,out);
 
 endmodule
 
-//////////////////////////main code
+/***********************************main code******************************************************/
 module eight_point_fft(CLK, RST_N, in0_real, in0_imag, in1_real, in1_imag, in2_real, in2_imag, in3_real, in3_imag, in4_real, in4_imag, in5_real, in5_imag, in6_real, in6_imag, in7_real, in7_imag, out0_real, out0_imag, out1_real, out1_imag, out2_real, out2_imag, out3_real, out3_imag, out4_real, out4_imag, out5_real, out5_imag, out6_real, out6_imag, out7_real, out7_imag  ,write, start, ready);
 
 input CLK, RST_N, write, start;
@@ -164,6 +164,7 @@ else begin
         end
 
         if (start) begin
+
                 b1_r <= y1_r + y5_r;
                 b1_i <= y1_i + y5_i;
 
@@ -214,7 +215,7 @@ endmodule
 
 
 
-
+/*********************************** test bench ******************************************************/
 `timescale 1ns/1ps
 
 module eight_point_fft_tb;
