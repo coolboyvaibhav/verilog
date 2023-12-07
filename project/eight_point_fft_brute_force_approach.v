@@ -1,263 +1,268 @@
-
-
-
-
-
-///working for stage 3 
-
 `timescale 1ns/1ps
 
-module eight_point_fft (CLK, RST_N,
-in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag,in4_real,in4_imag,in5_real,in5_imag,in6_real,in6_imag,in7_real,in7_imag,
-write, start, ready,
-out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag,out4_real,out4_imag,out5_real,out5_imag,out6_real,out6_imag,out7_real,out7_imag);
-//CLK Input Clock signal
-// RST_N Input Active-low reset signal
-// write Input Input write signal
-// start Input FFT computation start signal
-// ready Output FFT computation done signal
-
- input CLK, RST_N;//input for clk and rst
- 
- //input [15:0] in0_real,in0_imag,in1_real,in1_imag,in2_real,in2_imag,in3_real,in3_imag,in4_real,in4_imag,in5_real,in5_imag,in6_real,in6_imag,in7_real,in7_imag;//256 bits inputs
-
- input write, start;//write for storing value in registers a and b ; start=addition operation start
- //output [15:0] out0_real,out0_imag,out1_real,out1_imag,out2_real,out2_imag,out3_real,out3_imag,out4_real,out4_imag,out5_real,out5_imag,out6_real,out6_imag,out7_real,out7_imag;//for output storage 257 bits
- output ready;// result  is available at output
- 
- 
- 
-input wire signed [15:0] in0_real  ; // Input 16-bit real part of 𝑥0
-input wire signed [15:0] in0_imag  ; // Input 16-bit imaginary part of 𝑥0
-input wire signed [15:0] in1_real  ; // Input 16-bit real part of 𝑥1
-input wire signed [15:0] in1_imag  ; // Input 16-bit imaginary part of 𝑥1
-input wire signed [15:0] in2_real  ; // Input 16-bit real part of 𝑥2
-input wire signed [15:0] in2_imag  ; // Input 16-bit imaginary part of 𝑥2
-input wire signed [15:0] in3_real  ; // Input 16-bit real part of 𝑥3
-input wire signed [15:0] in3_imag  ; // Input 16-bit imaginary part of 𝑥3
-input wire signed [15:0] in4_real  ; // Input 16-bit real part of 𝑥4
-input wire signed [15:0] in4_imag  ; // Input 16-bit imaginary part of 𝑥4
-input wire signed [15:0] in5_real  ; // Input 16-bit real part of 𝑥5
-input wire signed [15:0] in5_imag  ; // Input 16-bit imaginary part of 𝑥5
-input wire signed [15:0] in6_real  ; // Input 16-bit real part of 𝑥6
-input wire signed [15:0] in6_imag  ; // Input 16-bit imaginary part of 𝑥6
-input wire signed [15:0] in7_real  ; // Input 16-bit real part of 𝑥7
-input wire signed [15:0] in7_imag  ; // Input 16-bit imaginary part of 𝑥7
-
-output signed [15:0] out0_real; //16-bit//Output  real part of 𝑋0
-output signed [15:0] out0_imag; // Output 16-bit imaginary part of 𝑋0
-output signed [15:0] out1_real; // Output 16-bit real part of 𝑋1
-output signed [15:0] out1_imag; // Output 16-bit imaginary part of 𝑋1
-output signed [15:0] out2_real; // Output 16-bit real part of 𝑋2
-output signed [15:0] out2_imag; // Output 16-bit imaginary part of 𝑋2
-output signed [15:0] out3_real; // Output 16-bit real part of 𝑋3
-output signed [15:0] out3_imag; // Output 16-bit imaginary part of 𝑋3
-output signed [15:0] out4_real; // Output 16-bit real part of 𝑋4
-output signed [15:0] out4_imag; // Output 16-bit imaginary part of 𝑋4
-output signed [15:0] out5_real; // Output 16-bit real part of 𝑋5
-output signed [15:0] out5_imag; // Output 16-bit imaginary part of 𝑋5
-output signed [15:0] out6_real; // Output 16-bit real part of 𝑋6
-output signed [15:0] out6_imag; // Output 16-bit imaginary part of 𝑋6
-output signed [15:0] out7_real; // Output 16-bit real part of 𝑋7
-output signed [15:0] out7_imag; // Output 16-bit imaginary part of 𝑋7
-
-
-//registers
-reg ready;
-
-
-//for inputs store in  registers
-
-reg signed[15:0] in0_real_reg; 
-reg signed[15:0] in0_imag_reg; 
-reg signed[15:0] in1_real_reg; 
-reg signed[15:0] in1_imag_reg; 
-reg signed[15:0] in2_real_reg; 
-reg signed[15:0] in2_imag_reg; 
-reg signed[15:0] in3_real_reg; 
-reg signed[15:0] in3_imag_reg; 
-reg signed[15:0] in4_real_reg; 
-reg signed[15:0] in4_imag_reg; 
-reg signed[15:0] in5_real_reg; 
-reg signed[15:0] in5_imag_reg; 
-reg signed[15:0] in6_real_reg; 
-reg signed[15:0] in6_imag_reg; 
-reg signed[15:0] in7_real_reg; 
-reg signed[15:0] in7_imag_reg; 
-
-//for output
-reg signed[15:0] out0_real_reg1,out0_real_reg2,out0_real_reg; 
-reg signed[15:0] out0_imag_reg1,out0_imag_reg2,out0_imag_reg; 
-reg signed[15:0] out1_real_reg1,out1_real_reg2,out1_real_reg; 
-reg signed[15:0] out1_imag_reg1,out1_imag_reg2,out1_imag_reg; 
-reg signed[15:0] out2_real_reg1,out2_real_reg2,out2_real_reg; 
-reg signed[15:0] out2_imag_reg1,out2_imag_reg2,out2_imag_reg; 
-reg signed[15:0] out3_real_reg1,out3_real_reg2,out3_real_reg; 
-reg signed[15:0] out3_imag_reg1,out3_imag_reg2,out3_imag_reg; 
-reg signed[15:0] out4_real_reg1,out4_real_reg2,out4_real_reg; 
-reg signed[15:0] out4_imag_reg1,out4_imag_reg2,out4_imag_reg; 
-reg signed[15:0] out5_real_reg1,out5_real_reg2,out5_real_reg; 
-reg signed[15:0] out5_imag_reg1,out5_imag_reg2,out5_imag_reg; 
-reg signed[15:0] out6_real_reg1,out6_real_reg2,out6_real_reg; 
-reg signed[15:0] out6_imag_reg1,out6_imag_reg2,out6_imag_reg; 
-reg signed[15:0] out7_real_reg1,out7_real_reg2,out7_real_reg; 
-reg signed[15:0] out7_imag_reg1,out7_imag_reg2,out7_imag_reg; 
-
-
-
-assign out0_real =out0_real_reg;
-assign out0_imag =out0_imag_reg;
-assign out1_real =out1_real_reg;
-assign out1_imag =out1_imag_reg;
-assign out2_real =out2_real_reg;
-assign out2_imag =out2_imag_reg;
-assign out3_real =out3_real_reg;
-assign out3_imag =out3_imag_reg;
-assign out4_real =out4_real_reg;
-assign out4_imag =out4_imag_reg;
-assign out5_real =out5_real_reg;
-assign out5_imag =out5_imag_reg;
-assign out6_real =out6_real_reg;
-assign out6_imag =out6_imag_reg;
-assign out7_real =out7_real_reg;
-assign out7_imag =out7_imag_reg;
-
-//twiddle factors
-
-//stage 1
-localparam w02_stage1=1;
-
-//stage 2
-localparam w04_stage2=1;
-localparam w14_stage2=-1;//imz
-
-//stage 3
-localparam w08_stage3=1;
-
-localparam w18_stage3_1=0.707;
-localparam w18_stage3_2=-0.707;//imz
-
-localparam w28_stage3=-1;//imz
-
-localparam w38_stage3_1=-0.707;
-localparam w38_stage3_2=-0.707;//imz
-
-always @(posedge CLK) begin
-                if (~RST_N) begin//reset is active low if rst=0 =>ready =1
-                        ready <= 1'b0;
+module eight_point_fft (CLK, RST_N, 
+in0_r,in0_imag, in1_r,in1_imag, in2_r,in2_imag, in3_r,in3_imag, in4_r,in4_imag, in5_r,in5_imag, in6_r,in6_imag, in7_r,in7_imag, 
+out0_r,out0_imag, out1_r,out1_imag, out2_r,out2_imag, out3_r,out3_imag, out4_r,out4_imag, out5_r,out5_imag, out6_r,out6_imag, out7_r,out7_imag, write, start, ready);
+	input CLK, RST_N;
+	input write, start;
+	output ready;
+    input signed[15:0] in0_r,in0_imag, in1_r,in1_imag,  in2_r,in2_imag, in3_r,in3_imag, in4_r,in4_imag, in5_r,in5_imag, in6_r,in6_imag, in7_r,in7_imag;
+	output signed[15:0] out0_r,out0_imag, out1_r,out1_imag, out2_r,out2_imag, out3_r,out3_imag, out4_r,out4_imag, out5_r,out5_imag, out6_r,out6_imag, out7_r,out7_imag;
+	reg signed[15:0] a0r,a0i, a1r,a1i, a2r,a2i, a3r,a3i, a4r,a4i, a5r,a5i, a6r,a6i, a7r,a7i;
+	reg signed[15:0] b0r,b0i, b1r,b1i, b2r,b2i, b3r,b3i, b4r,b4i, b5r,b5i, b6r,b6i, b7r,b7i;
+	reg ready;
+	reg signed[15:0] check_for_neg,dummy_variable,temp_integer,temp_fract,residual_int,residual_fract,result;
+	reg [7:0] integer_part;
+    reg [7:0] fractional_part;
+	reg flag;
+	/*********************twiddle = 0.703125****************/
+	parameter p_t = 16'b10110100;
+	assign out0_r = a0r;
+	assign out0_imag = a0i;
+	assign out1_r = a1r;
+	assign out1_imag = a1i;
+	assign out2_r = a2r;
+	assign out2_imag = a2i;
+	assign out3_r = a3r;
+	assign out3_imag = a3i;
+	assign out4_r = a4r;
+	assign out4_imag = a4i;
+	assign out5_r = a5r;
+	assign out5_imag = a5i;
+	assign out6_r = a6r;
+	assign out6_imag = a6i;
+	assign out7_r = a7r;
+	assign out7_imag = a7i;
+  always @(posedge CLK) begin
+		if (~RST_N) begin
+			ready <= 1'b0;
+		end
+		else begin
+			if (start) begin	
+				a0r =  b0r +  b1r + b2r + b3r + b4r + b5r + b6r + b7r;
+				a0i = 0;
+                a1r =  (b0r- b4r) +  (b2i - b6i);  //(b1r - b3r - b5r + b7r + b1i + b3i - b5i - b7i);
+				check_for_neg = (b1r - b3r - b5r + b7r + b1i + b3i - b5i - b7i);
+				dummy_variable = check_for_neg;                 // Store in dummy_variable variable
+				if (check_for_neg[15] == 1'b1) begin                 // Check for negative number
+					integer_part = check_for_neg[15:8];               // Separate higher order bits
+					fractional_part  = check_for_neg[7:0];                //Separate lower order bits
+					check_for_neg = {-integer_part , fractional_part};     // Get 2's complement for only integer part (higher order bits)
+					flag = 1'b1;
+				end
+				temp_integer = check_for_neg>>8;                   // Right shift to get integer part
+				temp_fract = {8'b00000000, check_for_neg[7:0]};    // Make the higher order 8 bits 0 to get only the fractional part
+				residual_int = p_t *temp_integer;               // Multiply with 0.703125 and get result of integer part 
+				if (flag) begin                             // Convert to 2's complement if original numner "check_for_neg" was negative
+					integer_part = residual_int[15:8];            // Separate higher order bits
+					fractional_part  = residual_int[7:0];             //Separate lower order bits
+					residual_int = {-integer_part , fractional_part};  // Get 2's complement for only integer part (higher order bits)
+					flag = 1'b0;
                 end
-		else begin//rst value 1
-			if(start) begin
-//stage 1
-				
-				out0_real_reg1<=in0_real_reg+in4_real_reg;
-				out0_imag_reg1<=in0_imag_reg+in4_imag_reg;
-				out1_real_reg1<=in0_real_reg-in4_real_reg;
-				out1_imag_reg1<=in0_imag_reg-in4_imag_reg;
-							 
-				out2_real_reg1<=in2_real_reg+in6_real_reg;
-				out2_imag_reg1<=in2_imag_reg+in6_imag_reg;
-				out3_real_reg1<=in2_real_reg-in6_real_reg;
-				out3_imag_reg1<=in2_imag_reg-in6_imag_reg;
-							 
-				out4_real_reg1<=in1_real_reg+in5_real_reg;
-				out4_imag_reg1<=in1_imag_reg+in5_imag_reg;
-				out5_real_reg1<=in1_real_reg-in5_real_reg;
-				out5_imag_reg1<=in1_imag_reg-in5_imag_reg;
-							 
-				out6_real_reg1<=in3_real_reg+in7_real_reg;
- 	            out6_imag_reg1<=in3_imag_reg+in7_imag_reg;
-  			    out7_real_reg1<=in3_real_reg-in7_real_reg;
-                out7_imag_reg1<=in3_imag_reg-in7_imag_reg;
-				
-				
-				//stage 2
-				
-				
-					
-				out0_real_reg2<=out0_real_reg1+out2_real_reg1;
-				out0_imag_reg2<=out0_imag_reg1+out2_imag_reg1;
-														   
-				out1_real_reg2<=out1_real_reg1+out3_imag_reg1;
-				out1_imag_reg2<=out1_imag_reg1-out3_real_reg1;
-														   
-				out2_real_reg2<=out0_real_reg1-out2_real_reg1;
-				out2_imag_reg2<=out0_imag_reg1-out2_imag_reg1;
-														   
-				out3_real_reg2<=out1_real_reg1-out3_real_reg1;
-				out3_imag_reg2<=out1_imag_reg1-out3_imag_reg1;				
-													   
-				out4_real_reg2<=out4_real_reg1+out6_real_reg1;
-				out4_imag_reg2<=out4_imag_reg1+out6_imag_reg1;
-													   
-				out5_real_reg2<=out5_real_reg1+out7_imag_reg1;
-				out5_imag_reg2<=out5_imag_reg1-out7_real_reg1;
-														   
-				out6_real_reg2<=out4_real_reg1-out6_real_reg1;
-				out6_imag_reg2<=out4_imag_reg1-out6_imag_reg1;
-														   
-				out7_real_reg2<=out5_real_reg1-out7_real_reg1;
-				out7_imag_reg2<=out5_imag_reg1-out7_imag_reg1;	
-////////////////////////////////stage 3
-				out0_real_reg<=out0_real_reg2+w08_stage3*out4_real_reg2;
-				out0_imag_reg<=out0_imag_reg2+w08_stage3*out4_imag_reg2;
-											
-				out1_real_reg<=out1_real_reg2+w18_stage3_1*out5_real_reg-w18_stage3_2*out5_imag_reg2;
-				out1_imag_reg<=out1_imag_reg2+w18_stage3_1*out5_imag_reg+w18_stage3_2*out5_real_reg2;
-											
-				out2_real_reg<=out2_real_reg2+out6_imag_reg2;
-				out2_imag_reg<=out2_imag_reg2-out6_real_reg2;
-											
-				out3_real_reg<=out3_real_reg2+w38_stage3_1*out7_real_reg-w38_stage3_2*out7_imag_reg2;
-				out3_imag_reg<=out3_imag_reg2+w38_stage3_1*out7_real_reg+w38_stage3_2*out7_imag_reg2;				
-											
-				out4_real_reg<=out0_real_reg2-w08_stage3*out4_real_reg2;
-				out4_imag_reg<=out0_imag_reg2-w08_stage3*out4_imag_reg2;
-											
-				out5_real_reg<=out1_real_reg2-w18_stage3_1*out5_real_reg+w18_stage3_2*out5_imag_reg2;
-				out5_imag_reg<=out1_imag_reg2-w18_stage3_1*out5_imag_reg-w18_stage3_2*out5_real_reg2;
-											
-				out6_real_reg<=out2_real_reg2-out6_imag_reg2;
-				out6_imag_reg<=out2_imag_reg2+out6_real_reg2;
-											
-				out7_real_reg<=out3_real_reg2-w38_stage3_1*out7_real_reg+w38_stage3_2*out7_imag_reg2;
-				out7_imag_reg<=out3_imag_reg2-w38_stage3_1*out7_real_reg-w38_stage3_2*out7_imag_reg2;							 
-								
-				
-				ready<=1'b1;//output is availble
-				//
+				residual_fract = p_t * temp_fract;           
+				residual_fract = residual_fract>>8;          
+				result = residual_int + residual_fract;      
+				a1r = a1r + result;
+				a1i = (b6r - b2r) + (b0i - b4i);    // + p_t*(b5r + b7r- b1r - b3r + b1i - b3i - b5i + b7i);
+				check_for_neg = (b5r + b7r- b1r - b3r + b1i - b3i - b5i + b7i);
+				dummy_variable = check_for_neg;                 
+				if (check_for_neg[15] == 1'b1) begin
+                  integer_part = check_for_neg[15:8];               
+				  fractional_part  = check_for_neg[7:0];            
+				  check_for_neg = {-integer_part , fractional_part};
+				  flag = 1'b1;
+				end
+				temp_integer = check_for_neg>>8;                   
+				temp_fract = {8'b00000000, check_for_neg[7:0]};    
+				residual_int = p_t *temp_integer;           
+				if (flag) begin                             
+					integer_part = residual_int[15:8];      
+					fractional_part  = residual_int[7:0];   
+					residual_int = {-integer_part , fractional_part};  
+					flag = 1'b0;
+                end
+				residual_fract = p_t * temp_fract;           
+				residual_fract = residual_fract>>8;          
+				result = residual_int + residual_fract;      
+				a1i =  a1i + result;
+				a2r =  (b0r - b2r + b4r - b6r) + (b1i - b3i + b5i - b7i);
+				a2i = (b3r - b1r - b5r + b7r) + (b0i - b2i + b4i - b6i);
+                a3r =  (b0r -  b4r) + (b6i - b2i);   
+				check_for_neg = (b3r + b5r - b1r - b7r + b1i + b3i - b5i - b7i);
+				dummy_variable = check_for_neg;                 
+				if (check_for_neg[15] == 1'b1) begin            
+					integer_part = check_for_neg[15:8];         
+					fractional_part  = check_for_neg[7:0];      
+					check_for_neg = {-integer_part , fractional_part};     
+					flag = 1'b1;
+				end
+				temp_integer = check_for_neg>>8;                
+				temp_fract = {8'b00000000, check_for_neg[7:0]}; 
+				residual_int = p_t *temp_integer;               
+				if (flag) begin                                 
+					integer_part = residual_int[15:8];            
+					fractional_part  = residual_int[7:0];         
+					residual_int = {-integer_part , fractional_part};  
+					flag = 1'b0;
+                end
+				residual_fract = p_t * temp_fract;          
+				residual_fract = residual_fract>>8;         
+				result = residual_int + residual_fract;     
+				a3r = a3r + result;
+                a3i = (b2r - b6r) + (b0i - b4i);  // + p_t*(b5r + b7r - b1r - b3r + b3i + b5i - b7i - b1i);
+				check_for_neg = (b5r + b7r - b1r - b3r + b3i + b5i - b7i - b1i);
+				dummy_variable = check_for_neg;                 
+				if (check_for_neg[15] == 1'b1) begin            
+					integer_part = check_for_neg[15:8];         
+					fractional_part  = check_for_neg[7:0];      
+					check_for_neg = {-integer_part , fractional_part};     
+					flag = 1'b1;
+				end
+				temp_integer = check_for_neg>>8;                  
+				temp_fract = {8'b00000000, check_for_neg[7:0]};   
+					residual_int = p_t *temp_integer;             
+				if (flag) begin                             
+					integer_part = residual_int[15:8];            
+					fractional_part  = residual_int[7:0];         
+					residual_int = {-integer_part , fractional_part};  
+					flag = 1'b0;
+                end
+				residual_fract = p_t * temp_fract;           
+				residual_fract = residual_fract>>8;          
+				result = residual_int + residual_fract;      
+				a3i = a3i + result;
+				a4r =  b0r -  b1r + b2r - b3r +b4r - b5r + b6r - b7r;
+				a4i = 0;
+				a5r =  a1r;  //blocking				
+				integer_part = a3i[15:8];               
+				fractional_part  = a3i[7:0];            
+				a5i = {-integer_part , fractional_part};
+                a6r =  a2r;  //blocking			
+				integer_part = a2i[15:8];               
+				fractional_part  = a2i[7:0];            
+				a6i = {-integer_part , fractional_part};
+                a7r =  a3r;  //blocking
+				integer_part = a1i[15:8];               
+				fractional_part  = a1i[7:0];            
+				a7i = {-integer_part , fractional_part};
+				ready <= 1'b1;
 			end
 			else begin
-				if (write) begin//to store the values when write is given
-					in0_real_reg<=in0_real; 
-			        in0_imag_reg<=in0_imag; 
-				    in1_real_reg<=in1_real; 
-				    in1_imag_reg<=in1_imag; 
-				    in2_real_reg<=in2_real; 
-				    in2_imag_reg<=in2_imag; 
-                    in3_real_reg<=in3_real; 
-                    in3_imag_reg<=in3_imag; 
-                    in4_real_reg<=in4_real; 
-                    in4_imag_reg<=in4_imag; 
-                    in5_real_reg<=in5_real; 
-                    in5_imag_reg<=in5_imag; 
-                    in6_real_reg<=in6_real; 
-     	            in6_imag_reg<=in6_imag; 
-                    in7_real_reg<=in7_real; 
-                    in7_imag_reg<=in7_imag; 
+				if (write) begin
+					 b0r <= in0_r;
+					b0i <= in0_imag;
+					b1r <= in1_r;
+					b1i <= in1_imag;
+					b2r <= in2_r;
+					b2i <= in2_imag;
+					b3r <= in3_r;
+					b3i <= in3_imag;
+					b4r <= in4_r;
+					b4i <= in4_imag;
+					b5r <= in5_r;
+					b5i <= in5_imag;
+					b6r <= in6_r;
+					b6i <= in6_imag;
+					b7r <= in7_r;
+					b7i <= in7_imag;
+					flag <= 1'b0;
 				end
-				else
-					ready<=1'b0;//not having output
-							
+				ready <= 1'b0;
 			end
 		end
 	end
 endmodule
-								
-								
-								
-								
 
+/************************************************test bench************/
+`timescale 1ns/1ps
+module eight_point_fft_tb();
+	parameter CLOCK_PERIOD = 10; // 10 MHz clock
+	parameter NUM_TEST = 1; // Number of tests
+    reg [2:0] test_count;
+	reg clk, rst;
+	reg write, start;
+	reg [15:0] in0_r,in0_imag, in1_r,in1_imag,  in2_r,in2_imag, in3_r,in3_imag, in4_r,in4_imag, in5_r,in5_imag, in6_r,in6_imag, in7_r,in7_imag;
+	wire [15:0] out0_r,out0_imag, out1_r,out1_imag, out2_r,out2_imag, out3_r,out3_imag, out4_r,out4_imag, out5_r,out5_imag, out6_r,out6_imag, out7_r,out7_imag;
+	wire ready;
+	reg [3:0] state;
+	reg en_a, en_b;
+	event terminate_sim;
+  eight_point_fft u_DUT (.CLK(clk),.RST_N(rst),.write(write),.start(start),.ready(ready),.out0_r(out0_r),.out0_imag(out0_imag),.out1_r(out1_r),.out1_imag(out1_imag),.out2_r(out2_r),.out2_imag(out2_imag),.out3_r(out3_r),.out3_imag(out3_imag),.out4_r(out4_r),.out4_imag(out4_imag),.out5_r(out5_r),.out5_imag(out5_imag),.out6_r(out6_r),.out6_imag(out6_imag),.out7_r(out7_r),.out7_imag(out7_imag),.in0_r(in0_r),.in0_imag(in0_imag),.in1_r(in1_r),.in1_imag(in1_imag),.in2_r(in2_r),.in2_imag(in2_imag),.in3_r(in3_r),.in3_imag(in3_imag),.in4_r(in4_r),.in4_imag(in4_imag),.in5_r(in5_r),.in5_imag(in5_imag),.in6_r(in6_r),.in6_imag(in6_imag),.in7_r(in7_r),.in7_imag(in7_imag));
+	always @(posedge clk) begin
+		if (rst == 1'b1) begin
+			if (state == 4'h0) begin
+				if (test_count == NUM_TEST) begin
+					-> terminate_sim;
+				end
+				if (test_count == 0) begin                  // Enable the FFT block
+					en_a <= 1'b1; en_b <= 1'b1;
+					state <= 4'h1;
+				end
+			end
+			if (state == 4'h1) begin                        //Write to the FFT block inputs
+				in0_r    = 16'b0000000100000000;
+				in0_imag = 16'b0000000000000000;
+				in1_r    = 16'b0000000100000000; 
+				in1_imag = 16'b0000000000000000;
+				in2_r    = 16'b0000001000000000; 
+				in2_imag = 16'b0000000000000000;
+				in3_r    = 16'b0000001100000000; 
+				in3_imag = 16'b0000000000000000;
+				in4_r    = 16'b0000010000000000; 
+				in4_imag = 16'b0000000000000000; 
+				in5_r    = 16'b0000010100000000; 
+				in5_imag = 16'b0000000000000000;
+				in6_r    = 16'b0000011000000000; 
+				in6_imag = 16'b0000000000000000;
+				in7_r    = 16'b0000011100000000; 
+				in7_imag = 16'b0000000000000000;
+				en_a <= 1'b0; en_b <= 1'b0; write <= 1'b1;
+				state <= 4'h2;
+			end
+			if (state == 4'h2) begin                 // Start the FFT computation
+				start <= 1'b1; write <= 1'b0;
+				state <= 4'h3;
+			end
+			if (state == 4'h3) begin
+				start <= 1'b0;
+				if (ready) begin                  
+                  if (test_count == NUM_TEST-1 ) begin
+					  state <= 4'h0;
+                                                                           
 
+					end
 
-
+					else begin
+						en_a <= 1'b1; en_b <= 1'b1;
+						state <= 4'h1;
+					end
+                  test_count <= test_count + 1;
+				end
+			end
+		end
+    	end
+	// End of simulation
+  	initial @(terminate_sim) begin
+        	$display("END OF SIMULATION (Time: %g ns)", $time);
+        	$display("##################\n");
+        	#1  $finish;
+    end
+ 	// Initial conditions
+	initial begin
+	    clk = 1'b0; rst = 1'b0;
+        en_a = 1'b0; en_b = 1'b0;
+		state = 4'h0;test_count = 0;
+		write = 1'b0; start = 1'b0;
+		#CLOCK_PERIOD rst = 1'b1;
+		#(CLOCK_PERIOD/2) $display("START OF SIMULATION (Time: %g ns)", $time);
+    	end
+	// System clock generator
+	always begin
+		#(CLOCK_PERIOD/2) clk = ~clk;
+	end
+  initial begin
+	   $dumpfile("fft_new_approach.vcd");
+		$dumpvars(0, u_DUT);
+$monitor("Time: %t \n out0_real = %b , out0_imag = %b \n out1_real = %b , out1_imag = %b \n out2_real = %b , out2_imag = %b \n out3_real = %b , out3_imag = %b \n out4_real = %b , out4_imag = %b \n out5_real = %b , out5_imag = %b \n out6_real = %b , out6_imag = %b \n out7_real = %b , out7_imag = %b \n ready = %b ", $time,out0_r,out0_imag, out1_r,out1_imag, out2_r,out2_imag, out3_r,out3_imag, out4_r,out4_imag, out5_r,out5_imag, out6_r,out6_imag, out7_r,out7_imag, ready);	end
+  
+endmodule

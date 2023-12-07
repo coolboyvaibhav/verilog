@@ -67,7 +67,7 @@ endmodule
 
 
 //   initial begin
-//      $display("real part =%f and imaginary part=(%f) ",out0_real*2.0**-8,out0_imag*2.0**-8);
+//   $display("real part =%f and imaginary part=(%f) ",out0_real*2.0**-8,out0_imag*2.0**-8);
 // 	 $display("real part =%f and imaginary part=(%f) ",out1_real*2.0**-8,out1_imag*2.0**-8);
 // 	 $display("real part =%f and imaginary part=(%f) ",out2_real*2.0**-8,out2_imag*2.0**-8);
 // 	 $display("real part =%f and imaginary part=(%f) ",out3_real*2.0**-8,out3_imag*2.0**-8);
@@ -102,7 +102,7 @@ reg signed [15:0] x0_r, x1_r, x2_r, x3_r, x4_r, x5_r, x6_r, x7_r, x0_i, x1_i, x2
 wire signed [15:0] e0_r, e1_r, e2_r, e3_r, e4_r, e5_r, e6_r, e7_r, e0_i, e1_i, e2_i, e3_i, e4_i, e5_i, e6_i, e7_i;
 reg signed [15:0] X0_r, X1_r, X2_r, X3_r, X4_r, X5_r, X6_r, X7_r, X0_i, X1_i, X2_i, X3_i, X4_i, X5_i, X6_i, X7_i;
 wire [15:0] out0_r, out1_r, out2_r, out3_r, out4_r, out5_r, out6_r, out7_r, out0_i, out1_i, out2_i, out3_i, out4_i, out5_i, out6_i, out7_i;
-
+wire [15:0] twiddle_factor;
 // We need to convert the signed 16-bit fixed point quantity inputs into their 2's complement
 
 twos_complement two0(in0_real,in0_r);
@@ -198,7 +198,11 @@ assign e6_i = x1_i - x3_i + x5_i - x7_i;
 assign e7_r = x1_r - x3_i - x5_r + x7_i;
 assign e7_i = x1_i + x3_r - x5_i - x7_r;
 
-localparam w18_stage3_1=16'b0000000101001010;
+// localparam w18_stage3_1=16'b0000000101001010;
+// reg signed [15:0] w18_stage3_1=0.707;
+// 0000000010110100
+
+// twos_complement twiddle(w18_stage3_1,twiddle_factor);
 
 always @(posedge CLK) begin
 if (~RST_N) begin
@@ -240,6 +244,7 @@ else begin
 		            // X1_r <= e1_r +(e5_r)*(w18_stage3_1) +(e5_i)*(w18_stage3_1);
                 // X1_i <= e1_i + (e5_i*w18_stage3_1)  - (e5_r*w18_stage3_1);
                 // $monitor("X1_i = %b \n w18_stage3_1 = %b ", X1_i,w18_stage3_1);
+                // $monitor("twiddle_factor = %b \n w18_stage3_1 = %b ", twiddle_factor,w18_stage3_1);
 
                 X2_r <= e2_r + e6_i;
                 X2_i <= e2_i - e6_r;
@@ -311,3 +316,104 @@ end
 end
 endmodule
 	
+
+
+/***********************************test bench starting ****************************************/
+
+`timescale 1ns/1ps
+
+module eight_point_fft_tb;
+
+        reg clk, rst_n, start, write;
+        reg [15:0] IN0_real, IN0_imag,IN1_real, IN1_imag, IN2_real, IN2_imag, IN3_real, IN3_imag, IN4_real, IN4_imag, IN5_real, IN5_imag, IN6_real, IN6_imag, IN7_real, IN7_imag;
+        wire signed [15:0] OUT0_real, OUT0_imag,OUT1_real, OUT1_imag, OUT2_real, OUT2_imag, OUT3_real, OUT3_imag, OUT4_real, OUT4_imag, OUT5_real, OUT5_imag, OUT6_real, OUT6_imag, OUT7_real, OUT7_imag;
+        wire ready;
+
+        eight_point_fft u_DUT(.CLK(clk), .RST_N(rst_n),
+    .in0_real(IN0_real),.in0_imag(IN0_imag), .in1_real(IN1_real), .in1_imag(IN1_imag), .in2_real(IN2_real), .in2_imag(IN2_imag), .in3_real(IN3_real), .in3_imag(IN3_imag), .in4_real(IN4_real), .in4_imag(IN4_imag), .in5_real(IN5_real), .in5_imag(IN5_imag), .in6_real(IN6_real), .in6_imag(IN6_imag), .in7_real(IN7_real), .in7_imag(IN7_imag),
+    .out0_real(OUT0_real),.out0_imag(OUT0_imag),.out1_real(OUT1_real), .out1_imag(OUT1_imag), .out2_real(OUT2_real), .out2_imag(OUT2_imag), .out3_real(OUT3_real), .out3_imag(OUT3_imag), .out4_real(OUT4_real), .out4_imag(OUT4_imag), .out5_real(OUT5_real), .out5_imag(OUT5_imag), .out6_real(OUT6_real), .out6_imag(OUT6_imag), .out7_real(OUT7_real), .out7_imag(OUT7_imag),
+    .write(write), .start(start), .ready(ready));
+
+	initial begin
+
+                //1st sample 0,1,2,3,4,5,6,7
+		IN0_real <= 16'b0000000000000000;
+		IN0_imag <= 16'b0000000000000000;
+		IN1_real <= 16'b0000000100000000;
+		IN1_imag <= 16'b0000000000000000;
+		IN2_real <= 16'b0000001000000000;
+		IN2_imag <= 16'b0000000000000000;
+		IN3_real <= 16'b0000001100000000;
+		IN3_imag <= 16'b0000000000000000;
+		IN4_real <= 16'b0000010000000000;
+		IN4_imag <= 16'b0000000000000000;
+		IN5_real <= 16'b0000010100000000;
+		IN5_imag <= 16'b0000000000000000;
+		IN6_real <= 16'b0000011000000000;
+		IN6_imag <= 16'b0000000000000000;
+		IN7_real <= 16'b0000011100000000;
+		IN7_imag <= 16'b0000000000000000;
+	
+        //2nd input sample 1,2,3,4,5,6,7,8
+           	// IN0_real <= 16'b0000000100000000;
+		// IN0_imag <= 16'b0000000000000000;
+		// IN1_real <= 16'b0000001000000000;
+		// IN1_imag <= 16'b0000000000000000;
+		// IN2_real <= 16'b0000001100000000;
+		// IN2_imag <= 16'b0000000000000000;
+		// IN3_real <= 16'b0000010000000000;
+		// IN3_imag <= 16'b0000000000000000;
+		// IN4_real <= 16'b0000010100000000;
+		// IN4_imag <= 16'b0000000000000000;
+		// IN5_real <= 16'b0000011000000000;
+		// IN5_imag <= 16'b0000000000000000;
+		// IN6_real <= 16'b0000011100000000;
+		// IN6_imag <= 16'b0000000000000000;
+		// IN7_real <= 16'b0000100000000000;
+		// IN7_imag <= 16'b0000000000000000;
+        //3rd input sample 1+1j,2+2j,3+3j,4+4j,5+5j,6+6J,7+7J,8+8J
+  	// IN0_real <= 16'b0000000100000000;
+		// IN0_imag <= 16'b0000000100000000;
+		// IN1_real <= 16'b0000001000000000;
+		// IN1_imag <= 16'b0000001000000000;
+		// IN2_real <= 16'b0000001100000000;
+		// IN2_imag <= 16'b0000001100000000;
+		// IN3_real <= 16'b0000010000000000;
+		// IN3_imag <= 16'b0000010000000000;
+		// IN4_real <= 16'b0000010100000000;
+		// IN4_imag <= 16'b0000010100000000;
+		// IN5_real <= 16'b0000011000000000;
+		// IN5_imag <= 16'b0000011000000000;
+		// IN6_real <= 16'b0000011100000000;
+		// IN6_imag <= 16'b0000011100000000;
+		// IN7_real <= 16'b0000100000000000;
+		// IN7_imag <= 16'b0000100000000000;
+
+
+                clk = 0;
+
+                rst_n = 1;
+                #20
+                rst_n = 0;
+                #15 rst_n = 1;
+                write = 1'b1;
+//              $display("%d",write);
+
+                #5 write = 1'b0;
+                #10 start = 1'b1;
+//              #5 start = 0;
+                #110000 $finish;
+        end
+        always begin
+                #5 clk = ~clk;
+        end
+
+        initial begin
+                $dumpfile("eight_point_fft_tb1.vcd");
+                $dumpvars(0, u_DUT);
+                $monitor("Time: %t \n out0_real = %b , out0_imag = %b \n out1_real = %b , out1_imag = %b \n out2_real = %b , out2_imag = %b \n out3_real = %b , out3_imag = %b \n out4_real = %b , out4_imag = %b \n out5_real = %b , out5_imag = %b \n out6_real = %b , out6_imag = %b \n out7_real = %b , out7_imag = %b \n ready = %b ", $time,OUT0_real,OUT0_imag, OUT1_real, OUT1_imag, OUT2_real, OUT2_imag, OUT3_real, OUT3_imag, OUT4_real, OUT4_imag, OUT5_real, OUT5_imag, OUT6_real, OUT6_imag, OUT7_real, OUT7_imag, ready);
+        end
+
+endmodule
+
+                                 
