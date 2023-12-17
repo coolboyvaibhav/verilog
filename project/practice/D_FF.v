@@ -19,3 +19,5 @@ always @(posedge reset or negedge clk) begin
 end
     
 endmodule
+
+
