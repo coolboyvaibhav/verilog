@@ -1,36 +1,48 @@
 `timescale 1ns/1ps
 
-`include "half_adder.v"
-`default_nettype none
+// `include "half_adder.v"
+// `default_nettype none
+module half_adder  (
+    s,c,a,b 
+);
+output s,c;
+input a,b;
+xor x1(s,a,b);
+and a1(c,a,b);
+endmodule
+
 
 module tb_half_adder;
-reg clk;
-reg rst_n;
 
-half_adder 
-(
-    .rst_n (rst_n),
-    .clk (clk),
-);
+reg a,b;
+wire s,c;
 
-localparam CLK_PERIOD = 10;
-always #(CLK_PERIOD/2) clk=~clk;
+//instantiation of lower level module 
+half_adder dut(.s(s),.c(c),.a(a),.b(b));
 
+//clock period
+// localparam CLK_PERIOD = 10;
+// always #(CLK_PERIOD/2) clk=~clk;
+
+//dumping data in vcd file 
 initial begin
     $dumpfile("tb_half_adder.vcd");
     $dumpvars(0, tb_half_adder);
 end
 
+
+
 initial begin
-    #1 rst_n<=1'bx;clk<=1'bx;
-    #(CLK_PERIOD*3) rst_n<=1;
-    #(CLK_PERIOD*3) rst_n<=0;clk<=0;
-    repeat(5) @(posedge clk);
-    rst_n<=1;
-    @(posedge clk);
-    repeat(2) @(posedge clk);
-    $finish(2);
+    a=0;b=0;
+    #10
+    b = 0; b = 1;
+    #10
+    a = 1; b = 0;
+    #10
+    b = 1; b = 1;
+    #10
+$finish();
 end
 
 endmodule
-`default_nettype wire
+// `default_nettype wire
