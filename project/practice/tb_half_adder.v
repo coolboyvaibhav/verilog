@@ -20,11 +20,7 @@ wire s,c;
 //instantiation of lower level module 
 half_adder dut(.s(s),.c(c),.a(a),.b(b));
 
-//clock period
-// localparam CLK_PERIOD = 10;
-// always #(CLK_PERIOD/2) clk=~clk;
 
-//dumping data in vcd file 
 initial begin
     $dumpfile("tb_half_adder.vcd");
     $dumpvars(0, tb_half_adder);
